@@ -59,7 +59,30 @@
     
 
     <script>
+        function playSound(e) {
+            const audio = document.querySelector(`audio[data-key='${e.keyCode}']`); 
+            const drumKey = document.querySelector(`div[data-key='${e.keyCode}']`); 
+            
+            if (!audio) return; // stop the function if no audio
+            audio.currentTime = 0; //rewinds audio to the start
+            audio.play(); 
+            
+            drumKey.classList.add('playing'); 
+        } 
+
+        function removeTransition(e) {
+            if (e.propertyName !== 'transform') return; //skip if it's not transform
+
+            this.classList.remove('playing'); //removes the css class - yellow border. 
+        }
+
+        const drumKeys = document.querySelectorAll('.key'); 
+        //must do forEach, because you can't 'addEventListener' to a Node List!  
+            // can't write this -> -> drumKeys.addEventListener...
+        // so you must listen to each value of the Node List 
+        drumKeys.forEach(drumkey => drumkey.addEventListener('transitionend', removeTransition)); 
         
+        window.addEventListener('keydown', playSound); 
 
     </script>
 </body>
